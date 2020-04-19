@@ -1,5 +1,9 @@
+# Folders
 .vscode/
 .ipynb_checkpoints/
-.env
+__pycache__/
 
+# Files
+.env
+*.py[cod]
 *.ipynb
