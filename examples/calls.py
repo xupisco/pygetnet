@@ -1,7 +1,8 @@
 import os
 
 from getnet import API
-from getnet.models import Customer, Plan, Subscription, Card, CardToken
+from getnet.models import Customer, Plan, Subscription, \
+    Card, CardToken, VerifyCard
 
 
 api = API(seller_id=os.environ.get('seller_id'),
@@ -11,15 +12,24 @@ api = API(seller_id=os.environ.get('seller_id'),
 sub = api.get(resource=Subscription,
               path_params=['8beb3d07-9169-4e85-b45e-0effa5ed653b'])
 
+
+#5496963627704751
+#19/10/2021
+#182
+
 token = api.post(resource=CardToken, payload={
-    'card_number': '123',
+    'card_number': '5496963627704751',
     'customer_id': '120398120938'}
 )
 
-ct = CardToken({})
+if not token.error:
+    verify = api.post(resource=VerifyCard, payload={
+        'number_token': token.result.number_token,
+        'expiration_month': 10,
+        'expiration_year': 21
+    })
 
-if token.error:
-    print(token.get_error())
+    print(verify)
 
 #dudes = api.get(resource=Customer, query_params={'limit': 3})
 #plans = api.get(resource=Plan)
