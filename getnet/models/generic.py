@@ -8,6 +8,9 @@ class Generic:
         'get': {
             'qs': [],
             'path': []
+        },
+        'post': {
+            'body': []
         }
     }
     

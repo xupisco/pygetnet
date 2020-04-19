@@ -16,7 +16,7 @@ token = api.post(resource=CardToken, payload={
     'customer_id': '120398120938'}
 )
 
-plans = api.get(resource=Plan)
+ct = CardToken({})
 
 if token.error:
     print(token.get_error())
