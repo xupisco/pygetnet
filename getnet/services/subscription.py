@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from getnet.models import Generic, Customer, Plan
+from getnet.services import Generic, Customer, Plan
 
 
 class Subscription(Generic):

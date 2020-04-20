@@ -5,7 +5,7 @@ import logging
 
 from . import __version__
 from getnet.utils import BaseResponseHandler, GenericResponse
-from getnet.models import Generic
+from getnet.services import Generic
 
 SANDBOX = 0
 HOMOLOG = 1
@@ -85,6 +85,8 @@ class API(BaseResponseHandler):
         )
         
     def _prepare_request(self, resource, endpoint):
+        resource = resource[0] if resource else None
+        
         if not resource and not endpoint:
             raise Exception("Resource or endpoint MUST be provided!")
         
@@ -117,7 +119,7 @@ class API(BaseResponseHandler):
         return GenericResponse({ 'error': False, 'total': 1, 'result': resource(data=data)})
    
      
-    def get(self, resource = None, endpoint: str = None, path_params: list = [], query_params: dict = {}):
+    def get(self, *resource, endpoint: str = None, path_params: list = [], query_params: dict = {}):
         resource, endpoint = self._prepare_request(resource, endpoint)
         
         if len(path_params):
@@ -137,7 +139,7 @@ class API(BaseResponseHandler):
         return self._parse_response(endpoint, resource, response)
 
 
-    def post(self, resource = None, endpoint: str = None, path_params: list = [], query_params: dict = {}, payload: dict = {}):
+    def post(self, *resource, endpoint: str = None, path_params: list = [], payload: dict = {}):
         resource, endpoint = self._prepare_request(resource, endpoint)
 
         payload = super(API, self).validate_required_params('post', 
@@ -147,7 +149,6 @@ class API(BaseResponseHandler):
         
         if len(path_params):
             path_params.insert(0, '/')
-            query_params = {}
         
         response = self.request.post(
             self.base_url + '/v1/' + endpoint + ''.join(path_params),

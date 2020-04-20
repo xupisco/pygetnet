@@ -1,15 +1,15 @@
 from datetime import datetime
 
-from getnet.models import Generic
+from getnet.services import Generic
 
 
-class CardToken(Generic):
-    _endpoint: str = 'tokens/card'
+class Card(Generic):
+    _endpoint: str = 'cards'
     _required_params = {
-        'post': {
-            'body': ['card_number',]
+        'get': {
+            'qs': ['customer_id']
         }
     }
-        
+    
     def __init__(self, endpoint=None, data={}):
         super().__init__(endpoint=self._endpoint, data=data)

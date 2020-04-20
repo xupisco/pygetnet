@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from getnet.models import Generic
+from getnet.services import Generic
 
 
 class VerifyCard(Generic):

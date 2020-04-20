@@ -1,6 +1,6 @@
 from datetime import date
 
-from getnet.models import Generic
+from getnet.services import Generic
 
 
 class CustomerAddress(Generic):
@@ -23,7 +23,8 @@ class Customer(Generic):
         'address': CustomerAddress
     }
 
-    birth_date: date
+    birth_date: date = date.today()
+    address: CustomerAddress = CustomerAddress()
     
     def __init__(self, data):
         super().__init__(self._endpoint, data=data)

@@ -1,10 +1,21 @@
 from datetime import datetime
 
-from getnet.models import Generic
+from getnet.services import Generic
 
 
 class Plan(Generic):
+    '''
+    API Doc: https://developers.getnet.com.br/api#tag/Planos
+    '''
     _endpoint: str = 'plans'
+    _required_params = {
+        'post': {
+            'body': [
+                'seller_id', 'name', 'amount',
+                'currency', 'payment_types', 'period'
+            ]
+        }
+    }
     
     amount: int = 0
     payment_types: list = []
