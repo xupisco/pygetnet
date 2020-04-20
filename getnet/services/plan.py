@@ -14,6 +14,9 @@ class Plan(Generic):
                 'seller_id', 'name', 'amount',
                 'currency', 'payment_types', 'period'
             ]
+        },
+        'patch': {
+            'body': ['name', 'description']
         }
     }
     

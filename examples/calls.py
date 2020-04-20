@@ -10,8 +10,26 @@ api = API(seller_id=os.environ.get('seller_id'),
           client_secret=os.environ.get('client_secret'))
 
 
-new_plan = api.post(Plan)
+new_plan_data = {
+    'seller_id': os.environ.get('seller_id'),
+    'name': 'New wrapper test',
+    'amount': 1,
+    'currency': 'BRL',
+    'payment_types': ['credit_card'],
+    'period': {
+        'type': 'monthly',
+        'billing_cycle': 0
+    }
+}
+#new_plan = api.post(Plan, payload=new_plan_data)
 
+disable_plan = api.patch(Plan, path_params=['77aea997-eb43-4f9b-ba8f-5424ea728b17', 'status', 'active'],
+    payload={
+        'name': 'Renamed plan',
+        'description': 'Renamed description'
+    })
+
+plan = api.get(Plan, path_params=['77aea997-eb43-4f9b-ba8f-5424ea728b17'])
 
 # Fake CC
 # 5496963627704751

@@ -128,7 +128,7 @@ class API(BaseResponseHandler):
         else:
             query_params = super(API, self).validate_required_params('get', 
                 query_params,
-                resource.get_params().get('get').get('qs')
+                resource.get_params().get('get', {}).get('qs', {})
             )
         
         response = self.request.get(
@@ -144,7 +144,7 @@ class API(BaseResponseHandler):
 
         payload = super(API, self).validate_required_params('post', 
             payload,
-            resource.get_params().get('post').get('body')
+            resource.get_params().get('post', {}).get('body', {})
         )
         
         if len(path_params):
@@ -152,6 +152,25 @@ class API(BaseResponseHandler):
         
         response = self.request.post(
             self.base_url + '/v1/' + endpoint + ''.join(path_params),
+            json = payload,
+            headers = {"Content-type": "application/json; charset=utf-8"}
+        )
+        
+        return self._parse_response(endpoint, resource, response)
+        
+    def patch(self, *resource, endpoint: str = None, path_params: list = [], payload: dict = {}):
+        resource, endpoint = self._prepare_request(resource, endpoint)
+
+        payload = super(API, self).validate_required_params('patch', 
+            payload,
+            resource.get_params().get('patch', {}).get('body', {})
+        )
+        
+        if len(path_params):
+            path_params.insert(0, '/')
+        
+        response = self.request.patch(
+            self.base_url + '/v1/' + endpoint + '/'.join(path_params),
             json = payload,
             headers = {"Content-type": "application/json; charset=utf-8"}
         )
