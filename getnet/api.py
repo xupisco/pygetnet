@@ -76,7 +76,11 @@ class API(BaseResponseHandler):
         response_data = response.json()
         
         if (response.status_code != 200):
-            raise Exception('Auth error {} ({}): {}'.format(response.status_code, response_data.get('error'), response_data.get('error_description')))
+            raise Exception('Auth error {} ({}): {}'.format(
+                response.status_code,
+                response_data.get('error'),
+                response_data.get('error_description'))
+            )
         
         self.access_token = response_data.get("access_token")
         self.access_token_expires = int(
