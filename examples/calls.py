@@ -32,12 +32,13 @@ dude_data = load_fixture('customer',
                          seller_id=os.environ.get('seller_id'),
                          customer_id=customer_id,
                          document_type=DOCUMENT_TYPES[0],
-                         document_number='123456')
+                         document_number='123456123456')
                          
 dude, created = api.get_or_create(Customer,
                                   path=[customer_id],
                                   defaults=dude_data)
 
+print(created)
 print(dude.full_name)
 
 subs_list = api.get(Subscription)
@@ -45,7 +46,9 @@ plan = api.get(Plan, path=['77aea997-eb43-4f9b-ba8f-5424ea728b17'])
 
 if not subs_list.error and subs_list.total > 1:
     for sub in subs_list.subscriptions:
-        charges = api.get(path=['charges'], data={'subscription_id': sub.subscription.subscription_id})
+        charges = api.get(path=['charges'],
+                          data={'subscription_id': sub.subscription.subscription_id})
+
         print(sub.customer.full_name + ': charged ' + str(charges.total) + ' times')
 
 # Fake CC
