@@ -26,7 +26,7 @@ new_plan_data = {
 
 DOCUMENT_TYPES = ['CPF', 'CNPJ']
 birth_date = datetime.strptime('18/02/1980', '%d/%m/%Y')
-customer_id = 'c7190fd6-1118-4fff-ae44-849cfed00fa4'
+customer_id = 'c7190fd6-1118-4fff-ae44-849cfed00fa5'
 
 dude_data = {
     'seller_id': os.environ.get('seller_id'),
@@ -34,7 +34,7 @@ dude_data = {
     'first_name': 'Alaor',
     'last_name': 'Gomes',
     'document_type': DOCUMENT_TYPES[0],
-    'document_number': '53154740032',
+    'document_number': '53154740033',
     'birth_date': birth_date.strftime('%Y-%m-%d'),
     'phone_number': '+55 11 5555-1234',
     'celphone_number': '+55 11 95555-1234',

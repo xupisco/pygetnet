@@ -5,6 +5,7 @@ from getnet.services import Generic, Customer, Plan
 
 class Charge(Generic):
     _endpoint: str = 'charges'
+    _writable = False
     
     def __init__(self, data):
         super().__init__(self._endpoint, data=data)

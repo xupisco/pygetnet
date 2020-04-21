@@ -63,3 +63,6 @@ Be safe!
  - Removed endpoint param in favor of path list, if using a Resource it's not required, it also accept extra path info, like `path=['folder', 'another_folder']`
  - Refactored `API._prepare_request` to reflect those changes
  - Added `get_or_create` method to API
+ - Added `_writable` attribute to Resource class
+ - Fixed response type with Generic class
+ 

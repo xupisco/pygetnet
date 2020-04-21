@@ -3,6 +3,7 @@ from dateutil import parser
 
 class Generic:
     _endpoint = None
+    _writable = True
     _relations = {}
     _required_params = {
         'get': {
@@ -46,6 +47,10 @@ class Generic:
     @classmethod
     def get_params(cls):
         return cls._required_params
+        
+    @classmethod
+    def can_write(cls):
+        return cls._writable
         
     def as_dict(self):
         return self.__dict__

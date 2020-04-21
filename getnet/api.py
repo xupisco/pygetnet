@@ -139,14 +139,13 @@ class API(BaseResponseHandler):
             if (result.get('total') > 1):
                 response_data = { endpoint: [resource(data=fields) for fields in data.get(endpoint)] }
             else:
-                response_data = resource(data=data.get(endpoint)[0]).as_dict()
+                response_data = resource(data=data.get(endpoint)[0])
                 
         if not response_data:
             response_data = resource(data=data).as_dict()
-            # Fix response_data when Resource is available
         
         result.update(response_data)
-        return GenericResponse(result)
+        return resource(result)
    
     def get(self, *resource, **kwargs):
         kwargs.update({ 'resource': resource })
@@ -172,6 +171,9 @@ class API(BaseResponseHandler):
             raise Exception('Error getting resource.')
 
         if existing.status_code == 404:
+            if not r.can_write():
+                raise Exception('The Resource ({}) is read only!'.format(str(r)))
+                
             default_data = {'data': kwargs.get('defaults')}
             data.update(default_data)
 
