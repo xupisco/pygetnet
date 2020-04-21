@@ -55,6 +55,8 @@ dude, created = api.get_or_create(Customer,
                                   path=[dude_data['customer_id']],
                                   defaults=dude_data)
 
+print(dude.full_name)
+
 subs_list = api.get(Subscription)
 plan = api.get(Plan, path=['77aea997-eb43-4f9b-ba8f-5424ea728b17'])
 

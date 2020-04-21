@@ -143,6 +143,7 @@ class API(BaseResponseHandler):
                 
         if not response_data:
             response_data = resource(data=data).as_dict()
+            # Fix response_data when Resource is available
         
         result.update(response_data)
         return GenericResponse(result)
@@ -174,7 +175,10 @@ class API(BaseResponseHandler):
             default_data = {'data': kwargs.get('defaults')}
             data.update(default_data)
 
-            return self.post(r, **data), True
+            created = self.post(r, **data)
+            if created.error:
+                raise Exception('Error creating resource, response: ' + created.get_error())
+            return created, True
         else:
             return existing, False
 
