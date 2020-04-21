@@ -24,7 +24,6 @@ class Customer(Generic):
     }
 
     birth_date: date = date.today()
-    address: CustomerAddress = CustomerAddress()
     
     def __init__(self, data):
         super().__init__(self._endpoint, data=data)

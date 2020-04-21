@@ -20,6 +20,10 @@ API_URLS = {
 }
 
 class API(BaseResponseHandler):
+    '''
+    Request params:
+     - endpoint (or resource), path, data  
+    '''
     request: requests.Session
     seller_id: str
     client_id: str
@@ -84,95 +88,94 @@ class API(BaseResponseHandler):
             {"Authorization": "Bearer {}".format(self.access_token)}
         )
         
-    def _prepare_request(self, resource, endpoint):
-        resource = resource[0] if resource else None
+    def _prepare_request(self, method='get', **kwargs):
+        r = kwargs.get('resource', None)
+        e = kwargs.get('endpoint', '')
+        path = kwargs.get('path', [])
+        data = kwargs.get('data', {})
+
+        r = r[0] if r else None
         
-        if not resource and not endpoint:
+        if not r and not e:
             raise Exception("Resource or endpoint MUST be provided!")
         
         self._validate_access_token()
         
-        resource = resource or Generic
-        endpoint = resource.get_endpoint() or endpoint
+        r = r or Generic
+        e = r.get_endpoint() or e
+
+        if len(path):
+            path.insert(0, '/')
         
-        return resource, endpoint
+        _field = 'qs' if method == 'get' else 'body'
+
+        data = super(API, self).validate_required_params(method, 
+            data, r.get_params().get(method, {}).get(_field, {})
+        )
+
+        return r, e, path, data
         
-    def _parse_response(self, endpoint, resource, response):
+    def _parse_response(self, resource, endpoint, response):
         data = super(API, self).validate_response(response.json())
         if data.get('error'):
             return GenericResponse(data)
         
-        if data.get('total', 0) or data.get(endpoint):
-            result = {
-                'error': False,
+        result = {
+            'error': False,
+            'total': data.get('total') or len(data.get(endpoint, ['dummy'])),
+            '_meta': {
                 'page': data.get('page') or 1,
-                'limit': data.get('limit') or 100,
-                'total': data.get('total') or len(data.get(endpoint))
+                'limit': data.get('limit') or 100
             }
-        
+        }
+
+        response_data = None
+
+        if data.get('total', 0) or data.get(endpoint):        
             if (result.get('total') > 1):
-                result.update({ 'results': [resource(data=fields) for fields in data.get(endpoint)] })
-                return GenericResponse(result)
+                response_data = { endpoint: [resource(data=fields) for fields in data.get(endpoint)] }
             else:
-                return GenericResponse({ 'error': False, 'total': 1, 'result': resource(data=data.get(endpoint)[0])})
-            
-        return GenericResponse({ 'error': False, 'total': 1, 'result': resource(data=data)})
-   
-     
-    def get(self, *resource, endpoint: str = None, path_params: list = [], query_params: dict = {}):
-        resource, endpoint = self._prepare_request(resource, endpoint)
+                response_data = resource(data=data.get(endpoint)[0]).as_dict()
+                
+        if not response_data:
+            response_data = resource(data=data).as_dict()
         
-        if len(path_params):
-            path_params.insert(0, '/')
-            query_params = {}
-        else:
-            query_params = super(API, self).validate_required_params('get', 
-                query_params,
-                resource.get_params().get('get', {}).get('qs', {})
-            )
+        result.update(response_data)
+        return GenericResponse(result)
+   
+    
+    def get(self, *resource, **kwargs):
+        kwargs.update({ 'resource': resource })
+        r, e, path, data = self._prepare_request(**kwargs)
         
         response = self.request.get(
-            self.base_url + '/v1/' + endpoint + ''.join(path_params),
-            params = query_params
+            self.base_url + '/v1/' + e + ''.join(path),
+            params = data
         )
         
-        return self._parse_response(endpoint, resource, response)
+        return self._parse_response(r, e, response)
 
 
-    def post(self, *resource, endpoint: str = None, path_params: list = [], payload: dict = {}):
-        resource, endpoint = self._prepare_request(resource, endpoint)
-
-        payload = super(API, self).validate_required_params('post', 
-            payload,
-            resource.get_params().get('post', {}).get('body', {})
-        )
-        
-        if len(path_params):
-            path_params.insert(0, '/')
+    def post(self, *resource, **kwargs):
+        kwargs.update({ 'resource': resource })
+        r, e, path, data = self._prepare_request('post', **kwargs)
         
         response = self.request.post(
-            self.base_url + '/v1/' + endpoint + ''.join(path_params),
-            json = payload,
+            self.base_url + '/v1/' + e + ''.join(path),
+            json = data,
             headers = {"Content-type": "application/json; charset=utf-8"}
         )
         
-        return self._parse_response(endpoint, resource, response)
+        return self._parse_response(r, e, response)
         
-    def patch(self, *resource, endpoint: str = None, path_params: list = [], payload: dict = {}):
-        resource, endpoint = self._prepare_request(resource, endpoint)
-
-        payload = super(API, self).validate_required_params('patch', 
-            payload,
-            resource.get_params().get('patch', {}).get('body', {})
-        )
-        
-        if len(path_params):
-            path_params.insert(0, '/')
+    def patch(self, *resource, **kwargs):
+        kwargs.update({ 'resource': resource })
+        r, e, path, data = self._prepare_request('patch', **kwargs)
         
         response = self.request.patch(
-            self.base_url + '/v1/' + endpoint + '/'.join(path_params),
-            json = payload,
+            self.base_url + '/v1/' + e + ''.join(path),
+            json = data,
             headers = {"Content-type": "application/json; charset=utf-8"}
         )
         
-        return self._parse_response(endpoint, resource, response)
+        return self._parse_response(r, e, response)
