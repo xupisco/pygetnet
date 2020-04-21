@@ -65,4 +65,6 @@ Be safe!
  - Added `get_or_create` method to API
  - Added `_writable` attribute to Resource class
  - Fixed response type with Generic class
+ - Added fixtures for fast tests
+ - Added `getnet_utils.md` file with some important informations
  

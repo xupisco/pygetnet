@@ -1,0 +1,11 @@
+{
+    "seller_id": "_var_seller_id",
+    "name": "New wrapper test",
+    "amount": 1,
+    "currency": "BRL",
+    "payment_types": ["credit_card"],
+    "period": {
+        "type": "monthly",
+        "billing_cycle": 0
+    }
+}

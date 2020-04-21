@@ -1,0 +1,23 @@
+{
+    "seller_id": "_var_seller_id",
+    "customer_id": "_var_customer_id",
+    "first_name": "Alaor",
+    "last_name": "Gomes",
+    "document_type": "CPF",
+    "document_number": "_var_document_number",
+    "birth_date": "1980-04-09",
+    "phone_number": "+55 11 5555-1234",
+    "celphone_number": "+55 11 95555-1234",
+    "email": "alaor@gomes.net",
+    "observation": "Alaor é um cara legal!",
+    "address": {
+        "street": "Rua dos amaciantes",
+        "number": "123",
+        "complement": "Fundos, casa 2",
+        "district": "Pirapora do Oeste",
+        "city": "Ghotam",
+        "state": "DC",
+        "country": "USA",
+        "postal_code": "55555123"
+    }
+}
