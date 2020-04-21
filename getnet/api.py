@@ -19,6 +19,7 @@ API_URLS = {
     PRODUCTION: "https://api.getnet.com.br",
 }
 
+
 class API(BaseResponseHandler):
     '''
     Request params:
@@ -52,13 +53,11 @@ class API(BaseResponseHandler):
         
         self._validate_access_token()
         
-
     def _validate_access_token(self):
         if not self.access_token or \
             self.access_token_expires < datetime.timestamp(datetime.now()):
         
-            self.auth()
-            
+            self.auth()    
 
     def auth(self) -> None:
         path = "/auth/oauth/v2/token"
@@ -107,6 +106,7 @@ class API(BaseResponseHandler):
         r = r or Generic
         e = r.get_endpoint() or path[0]
         path = path or [e]
+
         if e not in path:
             path.insert(0, e)
         
@@ -126,6 +126,7 @@ class API(BaseResponseHandler):
         result = {
             'error': False,
             'total': data.get('total') or len(data.get(endpoint, ['dummy'])),
+            'status_code': data.get('status_code', 200),
             '_meta': {
                 'page': data.get('page') or 1,
                 'limit': data.get('limit') or 100
@@ -146,7 +147,6 @@ class API(BaseResponseHandler):
         result.update(response_data)
         return GenericResponse(result)
    
-    
     def get(self, *resource, **kwargs):
         kwargs.update({ 'resource': resource })
         r, e, path, data = self._prepare_request(**kwargs)
@@ -158,6 +158,25 @@ class API(BaseResponseHandler):
         
         return self._parse_response(r, e, response)
 
+    def get_or_create(self, *resource, **kwargs):
+        if not kwargs.get('defaults', None):
+            raise Exception('You must provide defaults related to the calling Resource with get_or_create.')
+
+        kwargs.update({ 'resource': resource })
+        r, e, path, data = self._prepare_request(**kwargs)
+
+        existing = self.get(r, **kwargs)
+
+        if existing.error and existing.status_code != 404:
+            raise Exception('Error getting resource.')
+
+        if existing.status_code == 404:
+            default_data = {'data': kwargs.get('defaults')}
+            data.update(default_data)
+
+            return self.post(r, **data), True
+        else:
+            return existing, False
 
     def post(self, *resource, **kwargs):
         kwargs.update({ 'resource': resource })

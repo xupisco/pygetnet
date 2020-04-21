@@ -20,10 +20,9 @@ class BaseResponseHandler:
                     raise Exception('Missing required param: {}'.format(param))
         
         return params
-
         
     def validate_response(self, data):
-        if data.get('status_code', '200') != '200':
+        if data.get('status_code', 200) != 200:
             return {
                 'error': True,
                 'status_code': data.get('status_code'),
