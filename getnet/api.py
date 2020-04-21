@@ -22,7 +22,7 @@ API_URLS = {
 class API(BaseResponseHandler):
     '''
     Request params:
-     - endpoint (or resource), path, data  
+     - resource (or path), data  
     '''
     request: requests.Session
     seller_id: str
@@ -94,22 +94,21 @@ class API(BaseResponseHandler):
         
     def _prepare_request(self, method='get', **kwargs):
         r = kwargs.get('resource', None)
-        e = kwargs.get('endpoint', '')
-        path = kwargs.get('path', [])
+        path = kwargs.get('path', '')
         data = kwargs.get('data', {})
 
         r = r[0] if r else None
         
-        if not r and not e:
-            raise Exception("Resource or endpoint MUST be provided!")
+        if not r and not len(path):
+            raise Exception("Resource or path MUST be provided!")
         
         self._validate_access_token()
         
         r = r or Generic
-        e = r.get_endpoint() or e
-
-        if len(path):
-            path.insert(0, '/')
+        e = r.get_endpoint() or path[0]
+        path = path or [e]
+        if e not in path:
+            path.insert(0, e)
         
         _field = 'qs' if method == 'get' else 'body'
 
@@ -117,7 +116,7 @@ class API(BaseResponseHandler):
             data, r.get_params().get(method, {}).get(_field, {})
         )
 
-        return r, e, path, data
+        return r, e, '/'.join(path), data
         
     def _parse_response(self, resource, endpoint, response):
         data = super(API, self).validate_response(response.json())
@@ -153,7 +152,7 @@ class API(BaseResponseHandler):
         r, e, path, data = self._prepare_request(**kwargs)
         
         response = self.request.get(
-            self.base_url + '/v1/' + e + ''.join(path),
+            self.base_url + '/v1/' + path,
             params = data
         )
         
@@ -165,7 +164,7 @@ class API(BaseResponseHandler):
         r, e, path, data = self._prepare_request('post', **kwargs)
         
         response = self.request.post(
-            self.base_url + '/v1/' + e + ''.join(path),
+            self.base_url + '/v1/' + path,
             json = data,
             headers = {"Content-type": "application/json; charset=utf-8"}
         )
@@ -177,7 +176,7 @@ class API(BaseResponseHandler):
         r, e, path, data = self._prepare_request('patch', **kwargs)
         
         response = self.request.patch(
-            self.base_url + '/v1/' + e + ''.join(path),
+            self.base_url + '/v1/' + path,
             json = data,
             headers = {"Content-type": "application/json; charset=utf-8"}
         )

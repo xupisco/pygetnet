@@ -1,4 +1,4 @@
 __author__: str = "Leandro Voltolino <xupisco@gmail.com>"
-__version__: str = "0.01"
+__version__: str = "0.02"
 
 from .api import API

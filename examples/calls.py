@@ -24,10 +24,11 @@ new_plan_data = {
 #new_plan = api.post(Plan, data=new_plan_data)
 
 subs_list = api.get(Subscription)
+plan = api.get(Plan, path=['77aea997-eb43-4f9b-ba8f-5424ea728b17'])
 
 if not subs_list.error and subs_list.total > 1:
     for sub in subs_list.subscriptions:
-        charges = api.get(endpoint='charges', data={'subscription_id': sub.subscription.subscription_id})
+        charges = api.get(path=['charges'], data={'subscription_id': sub.subscription.subscription_id})
         print(sub.customer.full_name + ': charged ' + str(charges.total) + ' times')
 
 # Fake CC

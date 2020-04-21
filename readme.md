@@ -55,4 +55,10 @@ Creating a subscription plan:
     new_plan = api.post(Plan, data=new_plan_data)
     print(new_plan.plan_id)
 
+More examples in `examples/call.py`  
 Be safe!
+
+### Changelog
+0.02:
+ - Removed endpoint param in favor of path list, if using a Resource it's not required, it also accept extra path info, like `path=['folder', 'another_folder']`
+ - Refactored `API._prepare_request` to reflect those changes.
