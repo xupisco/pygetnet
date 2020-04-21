@@ -27,7 +27,8 @@ subs_list = api.get(Subscription)
 
 if not subs_list.error and subs_list.total > 1:
     for sub in subs_list.subscriptions:
-        print(sub.customer.full_name)
+        charges = api.get(endpoint='charges', data={'subscription_id': sub.subscription.subscription_id})
+        print(sub.customer.full_name + ': charged ' + str(charges.total) + ' times')
 
 # Fake CC
 # 5496963627704751
