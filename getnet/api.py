@@ -144,7 +144,7 @@ class API(BaseResponseHandler):
             response_data = resource(data=data).as_dict()
 
         result.update(response_data)
-        return resource(result)
+        return resource(data=result)
 
     def get(self, *resource, **kwargs):
         kwargs.update({'resource': resource})

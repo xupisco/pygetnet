@@ -34,7 +34,7 @@ class Generic:
 
     def _match_basic_value_type(self, v, t):
         if t is datetime:
-            return parser.parse(v)
+            return parser.parse(str(v))
         try:
             return t(v)
         except:
