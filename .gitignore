@@ -1,4 +1,5 @@
 # Folders
+.idea/
 .vscode/
 .ipynb_checkpoints/
 __pycache__/
