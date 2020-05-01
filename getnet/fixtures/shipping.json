@@ -1,0 +1,18 @@
+[
+  {
+    "first_name": "Alaor",
+    "name": "Alaor gomes",
+    "email": "alaor@acme.net",
+    "phone_number": "+55 11 5555-1234",
+    "shipping_amount": 1449,
+    "address": "_var_address"
+  },
+  {
+    "first_name": "John",
+    "name": "Doe",
+    "email": "johndoe@fox.net",
+    "phone_number": "+55 11 99999-1234",
+    "shipping_amount": 4449,
+    "address": "_var_address"
+  }
+]

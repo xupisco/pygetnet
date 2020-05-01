@@ -6,8 +6,8 @@
     "document_type": "CPF",
     "document_number": "_var_document_number",
     "birth_date": "1980-04-09",
-    "phone_number": "+55 11 5555-1234",
-    "celphone_number": "+55 11 95555-1234",
+    "phone_number": "+551155551234",
+    "celphone_number": "+551195555-1234",
     "email": "alaor@gomes.net",
     "observation": "Alaor é um cara legal!",
     "address": {

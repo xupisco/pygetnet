@@ -1,12 +1,10 @@
-from datetime import datetime
-
 from getnet.services import Generic, Customer, CustomerAddress
 
 
 class Credit(Generic):
-    '''
+    """
     API Doc: https://developers.getnet.com.br/api#tag/Pagamento%2Fpaths%2F~1v1~1payments~1credit%2Fpost
-    '''
+    """
     _endpoint: str = 'payments/credit'
     _relations = {
         'customer': Customer,
@@ -15,7 +13,7 @@ class Credit(Generic):
     _required_params = {
         'post': {
             'body': [
-                'amount', 'order', 'customer', 'device'
+                'amount', 'order', 'customer', 'device',
                 'shippings', 'credit'
             ]
         }

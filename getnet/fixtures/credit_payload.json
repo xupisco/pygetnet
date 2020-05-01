@@ -1,0 +1,18 @@
+{
+  "delayed": false,
+  "authenticated": false,
+  "pre_authorization": false,
+  "save_card_data": false,
+  "transaction_type": "_var_transaction_type",
+  "number_installments": "_var_number_installments",
+  "soft_descriptor": "ACME store",
+  "dynamic_mcc": 0,
+  "card": {
+    "number_token": "_var_number_token",
+    "cardholder_name": "_var_cardholder_name",
+    "security_code": "123",
+    "brand": "Mastercard",
+    "expiration_month": 12,
+    "expiration_year": 22
+  }
+}

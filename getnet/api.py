@@ -135,10 +135,7 @@ class API(BaseResponseHandler):
         response_data = None
 
         if data.get('total', 0) or data.get(endpoint):
-            if result.get('total') > 1:
-                response_data = {endpoint: [resource(data=fields) for fields in data.get(endpoint)]}
-            else:
-                response_data = resource(data=data.get(endpoint)[0])
+            response_data = {endpoint: [resource(data=fields) for fields in data.get(endpoint)]}
 
         if not response_data:
             response_data = resource(data=data).as_dict()
